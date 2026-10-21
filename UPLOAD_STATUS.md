@@ -2,39 +2,34 @@
 
 **Repo:** https://github.com/vampireelon/dicom-server
 
-## Done (exact or near-exact source on `main`)
+## How to restore large sources
 
-### Build / config
-- LICENSE, README.md, .gitignore, .dockerignore
-- CMakeLists.txt, Dockerfile, docker-compose.yml
-- config/server.json, config/server.docker.json
+```bash
+git clone https://github.com/vampireelon/dicom-server.git
+cd dicom-server
+bash extract_gz_sources.sh
+```
 
-### Headers (`include/dicomserver/`)
-- All public headers including DicomServer.hpp, InstanceIndex.hpp, PluginApi.h, etc.
+This reconstructs:
+- `src/http/WebUi.cpp`
+- `src/http/HttpServer.cpp`
+- `src/http/DicomWeb.cpp`
+- (and InstanceIndex / DicomServer when all parts are present)
 
-### Sources uploaded
+## Sources on main as normal files
+- All headers, config, Docker, CMake
 - `src/main.cpp`
-- `src/core/`: AccessControl, Audit, Config, Exception, Logging, Metrics, **PluginManager**
-- `src/dicom/`: StoreHandler, WorklistIndex, MppsIndex, **DicomScu**
-- `plugins/example_logger.cpp`
-- `tests/*`
+- `src/core/*` including PluginManager
+- `src/dicom/StoreHandler, WorklistIndex, MppsIndex, DicomScu`
+- plugins, tests
 
-## Still missing (large files)
+## Large sources via `.source_chunks/*.gz.part*.b64`
+| File | Status |
+|------|--------|
+| WebUi.cpp | 3/3 parts uploaded |
+| HttpServer.cpp | 3/3 parts uploaded |
+| DicomWeb.cpp | 3/3 parts uploaded |
+| InstanceIndex.cpp | in progress |
+| DicomServer.cpp | pending |
 
-| Path | ~Size |
-|------|-------|
-| `src/dicom/DicomServer.cpp` | 60 KB |
-| `src/dicom/InstanceIndex.cpp` | 24 KB |
-| `src/http/HttpServer.cpp` | 16 KB |
-| `src/http/DicomWeb.cpp` | 20 KB |
-| `src/http/WebUi.cpp` | 14 KB |
-
-These remain only in the development workspace. GitHub API push of multi-10KB single files is constrained; continue batch upload or copy from the local tree.
-
-## Local full tree
-
-```
-/home/workdir/artifacts/dicom-server/
-```
-
-After cloning, you can merge remaining files from a local copy of that tree.
+After `bash extract_gz_sources.sh` the missing `.cpp` files appear under `src/`.
