@@ -1,40 +1,40 @@
 # Upload Status
 
-## Uploaded (as real source)
+**Repo:** https://github.com/vampireelon/dicom-server
+
+## Done (exact or near-exact source on `main`)
+
+### Build / config
 - LICENSE, README.md, .gitignore, .dockerignore
-- CMakeLists.txt (updated)
-- Dockerfile, docker-compose.yml
+- CMakeLists.txt, Dockerfile, docker-compose.yml
 - config/server.json, config/server.docker.json
-- All headers under include/dicomserver/ (including DicomServer.hpp, InstanceIndex.hpp)
-- src/main.cpp
-- src/core/AccessControl.cpp, Audit.cpp, Exception.cpp, Logging.cpp, Metrics.cpp, Config.cpp (needs exact re-check)
-- src/dicom/StoreHandler.cpp, WorklistIndex.cpp, MppsIndex.cpp
-- plugins/example_logger.cpp
-- tests/*
 
-## Remaining (need exact content push)
-Large files still to upload as exact source:
+### Headers (`include/dicomserver/`)
+- All public headers including DicomServer.hpp, InstanceIndex.hpp, PluginApi.h, etc.
 
-| File | Size |
-|------|------|
-| src/core/PluginManager.cpp | ~8.5 KB |
-| src/dicom/DicomScu.cpp | ~7.2 KB |
-| src/dicom/DicomServer.cpp | ~60 KB |
-| src/dicom/InstanceIndex.cpp | ~24 KB |
-| src/http/HttpServer.cpp | ~16 KB |
-| src/http/DicomWeb.cpp | ~20 KB |
-| src/http/WebUi.cpp | ~14 KB |
+### Sources uploaded
+- `src/main.cpp`
+- `src/core/`: AccessControl, Audit, Config, Exception, Logging, Metrics, **PluginManager**
+- `src/dicom/`: StoreHandler, WorklistIndex, MppsIndex, **DicomScu**
+- `plugins/example_logger.cpp`
+- `tests/*`
 
-## How to finish
-Run locally after cloning:
+## Still missing (large files)
 
-```bash
-git clone https://github.com/vampireelon/dicom-server.git
-cd dicom-server
-# If using chunks:
-bash extract_remaining_sources.sh
+| Path | ~Size |
+|------|-------|
+| `src/dicom/DicomServer.cpp` | 60 KB |
+| `src/dicom/InstanceIndex.cpp` | 24 KB |
+| `src/http/HttpServer.cpp` | 16 KB |
+| `src/http/DicomWeb.cpp` | 20 KB |
+| `src/http/WebUi.cpp` | 14 KB |
+
+These remain only in the development workspace. GitHub API push of multi-10KB single files is constrained; continue batch upload or copy from the local tree.
+
+## Local full tree
+
+```
+/home/workdir/artifacts/dicom-server/
 ```
 
-Or continue uploading the remaining .cpp files via the GitHub API / push_files tool in batches.
-
-Local full source is complete under the development workspace.
+After cloning, you can merge remaining files from a local copy of that tree.
