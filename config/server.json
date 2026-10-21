@@ -1,0 +1,38 @@
+{
+  "DicomAet": "DICOMSERVER",
+  "DicomPort": 4242,
+  "DicomCheckCalledAet": true,
+  "DicomAssociationTimeout": 30,
+  "DicomThreads": 4,
+  "LogLevel": "info",
+  "LogFile": "",
+  "StorageDirectory": "./storage",
+  "DicomModalities": {
+    "WORKSTATION1": ["WORKSTATION1", "127.0.0.1", 11112],
+    "PACS": ["PACS", "192.168.1.100", 104]
+  },
+  "WorklistDirectory": "./worklist",
+  "DicomTlsEnabled": false,
+  "DatabasePath": "./dicomserver.db",
+  "AuditLogFile": "./audit.log",
+  "HttpEnabled": true,
+  "HttpBindAddress": "0.0.0.0",
+  "HttpPort": 8042,
+  "HttpApiToken": "",
+  "MaxAssociations": 64,
+  "MaxDiskUsagePercent": 95,
+  "AuditMaxSizeMb": 100,
+  "DatabaseBackend": "sqlite",
+  "PostgresConnInfo": "",
+  "RebuildIndexOnStart": false,
+  "PluginDirectory": "./plugins",
+  "AccessControlEnabled": false,
+  "AccessControlDefaultPolicy": "allow",
+  "AccessControlRules": [
+    {"CallingAet": "TRUSTED_MOD", "Allow": ["echo", "store", "find", "move", "mpps", "naction"]},
+    {"CallingAet": "*", "Allow": ["echo", "find"]}
+  ],
+  "AssociationRateLimitPerMinute": 0,
+  "AnonymizeHttpExports": false,
+  "AuditHashChain": false
+}

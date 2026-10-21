@@ -1,0 +1,27 @@
+{
+  "DicomAet": "DICOMSERVER",
+  "DicomPort": 4242,
+  "DicomCheckCalledAet": true,
+  "DicomAssociationTimeout": 30,
+  "DicomThreads": 4,
+  "LogLevel": "info",
+  "StorageDirectory": "/var/lib/dicom-server/storage",
+  "WorklistDirectory": "/var/lib/dicom-server/worklist",
+  "DatabasePath": "",
+  "AuditLogFile": "/var/lib/dicom-server/data/audit.log",
+  "AuditMaxSizeMb": 100,
+  "HttpEnabled": true,
+  "HttpBindAddress": "0.0.0.0",
+  "HttpPort": 8042,
+  "HttpApiToken": "",
+  "MaxAssociations": 64,
+  "MaxDiskUsagePercent": 95,
+  "DicomTlsEnabled": false,
+  "DicomModalities": {
+    "DEST_SCP": ["DEST_SCP", "move-dest", 11113]
+  },
+  "DatabaseBackend": "postgres",
+  "PostgresConnInfo": "host=postgres port=5432 dbname=dicom user=dicom password=dicom",
+  "RebuildIndexOnStart": false,
+  "PluginDirectory": "./plugins"
+}
