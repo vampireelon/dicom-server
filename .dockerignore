@@ -1,0 +1,9 @@
+build/
+.git/
+*.db
+*.log
+storage/
+worklist/
+**/CMakeCache.txt
+**/CMakeFiles/
+_deps/
