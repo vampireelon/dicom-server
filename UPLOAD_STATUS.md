@@ -1,26 +1,40 @@
-# Upload status
+# Upload Status
 
-Repository: https://github.com/vampireelon/dicom-server
+## Uploaded (as real source)
+- LICENSE, README.md, .gitignore, .dockerignore
+- CMakeLists.txt (updated)
+- Dockerfile, docker-compose.yml
+- config/server.json, config/server.docker.json
+- All headers under include/dicomserver/ (including DicomServer.hpp, InstanceIndex.hpp)
+- src/main.cpp
+- src/core/AccessControl.cpp, Audit.cpp, Exception.cpp, Logging.cpp, Metrics.cpp, Config.cpp (needs exact re-check)
+- src/dicom/StoreHandler.cpp, WorklistIndex.cpp, MppsIndex.cpp
+- plugins/example_logger.cpp
+- tests/*
 
-## Already on `main`
+## Remaining (need exact content push)
+Large files still to upload as exact source:
 
-- Build: `CMakeLists.txt`, `Dockerfile`, `docker-compose.yml`
-- Config: `config/server.json`, `config/server.docker.json`
-- License / README / .gitignore
-- Most public headers under `include/dicomserver/`
-- `src/core/Metrics.cpp`, unit tests skeleton
+| File | Size |
+|------|------|
+| src/core/PluginManager.cpp | ~8.5 KB |
+| src/dicom/DicomScu.cpp | ~7.2 KB |
+| src/dicom/DicomServer.cpp | ~60 KB |
+| src/dicom/InstanceIndex.cpp | ~24 KB |
+| src/http/HttpServer.cpp | ~16 KB |
+| src/http/DicomWeb.cpp | ~20 KB |
+| src/http/WebUi.cpp | ~14 KB |
 
-## Still to push (implementation)
-
-Core `.cpp` under `src/core/`, `src/dicom/`, `src/http/`, remaining headers
-(`DicomServer.hpp`, `InstanceIndex.hpp`, …), and `plugins/example_logger.cpp`.
-
-These files exist in the development workspace and can be committed in a follow-up push.
-
-After the full tree is present:
+## How to finish
+Run locally after cloning:
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
-./build/dicom-server --config config/server.json
+git clone https://github.com/vampireelon/dicom-server.git
+cd dicom-server
+# If using chunks:
+bash extract_remaining_sources.sh
 ```
+
+Or continue uploading the remaining .cpp files via the GitHub API / push_files tool in batches.
+
+Local full source is complete under the development workspace.
