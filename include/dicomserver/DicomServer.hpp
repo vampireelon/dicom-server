@@ -17,11 +17,17 @@
 #include <thread>
 #include <vector>
 
+// Forward DCMTK types to keep header light
+struct T_ASC_Association;
+struct T_DIMSE_Message;
+typedef unsigned char T_ASC_PresentationContextID;
+typedef unsigned short OFCondition;  // simplified; real code uses DCMTK OFCondition
+
 namespace dicomserver {
 
 class DicomServer {
 public:
-    explicit DicomServer(Config config);
+    explicit DicomServer();
     ~DicomServer();
 
     DicomServer(const DicomServer&) = delete;
@@ -29,45 +35,27 @@ public:
 
     void Start();
     void Stop();
-    bool IsRunning() const { return running_.load(); }
+    bool IsRunning() const;
 
-    // Hot-reload configuration (SIGHUP)
-    void Reload(const Config& newConfig);
+    void Reload();
 
-    // Accessors for HTTP layer / plugins
-    InstanceIndex& GetIndex() { return *index_; }
-    const InstanceIndex& GetIndex() const { return *index_; }
-    WorklistIndex& GetWorklist() { return *worklist_; }
-    MppsIndex& GetMpps() { return *mpps_; }
-    AccessControl& GetAcl() { return *acl_; }
-    AuditLog& GetAudit() { return *audit_; }
-    PluginManager& GetPlugins() { return *plugins_; }
-    Metrics& GetMetrics() { return metrics_; }
-    const Config& GetConfig() const { return config_; }
+    InstanceIndex& Index();
+    WorklistIndex& Worklist();
+    MppsIndex& Mpps();
+    AccessControl& Acl();
+    AuditLog& Audit();
+    PluginManager& Plugins();
+    Metrics& GetMetrics();
 
 private:
     void AcceptLoop();
-    void HandleAssociation(int sock, const std::string& peerAe, const std::string& peerIp);
-    void ProcessDimse(void* assoc /* T_ASC_Association* */, const std::string& callingAe);
+    void OnAssociation(int clientFd, const std::string& peerIp);
 
-    // DIMSE service handlers
-    OFCondition HandleCEcho(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID pcId);
-    OFCondition HandleCStore(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID pcId,
-                             const std::string& callingAe);
-    OFCondition HandleCFind(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID pcId,
-                            const std::string& callingAe);
-    OFCondition HandleCMove(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID pcId,
-                            const std::string& callingAe);
-    OFCondition HandleCGet(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID pcId,
-                           const std::string& callingAe);
-    OFCondition HandleNCreate(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID pcId,
-                              const std::string& callingAe);
-    OFCondition HandleNSet(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID pcId,
-                           const std::string& callingAe);
-    OFCondition HandleNAction(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID pcId,
-                              const std::string& callingAe);
+    std::atomic<bool> running_{false};
+    int listenFd_{-1};
+    std::thread acceptThread_;
+    std::mutex mu_;
 
-    Config config_;
     std::unique_ptr<InstanceIndex> index_;
     std::unique_ptr<WorklistIndex> worklist_;
     std::unique_ptr<MppsIndex> mpps_;
@@ -76,11 +64,6 @@ private:
     std::unique_ptr<PluginManager> plugins_;
     std::unique_ptr<StoreHandler> storeHandler_;
     Metrics metrics_;
-
-    std::atomic<bool> running_{false};
-    int listenFd_{-1};
-    std::thread acceptThread_;
-    std::mutex configMutex_;
 };
 
 }  // namespace dicomserver
